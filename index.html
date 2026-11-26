@@ -249,15 +249,46 @@ img[alt*=Logo],img[alt*=logo],img[alt*=Emblema]{object-position:center}
  try{if('scrollRestoration'in history)history.scrollRestoration='manual';}catch(e){}
  function top(){window.scrollTo(0,0)} top();window.addEventListener('load',top);window.addEventListener('pageshow',top);
  const splash=document.getElementById('girardi-splash');
- setTimeout(()=>{if(splash){splash.classList.add('fade');setTimeout(()=>splash.remove(),700);}},5000);
+ setTimeout(()=>{if(splash){splash.classList.add('fade');setTimeout(()=>splash.remove(),500);}},3000);
  const frame=document.querySelector('.youtube-player iframe');if(!frame)return;
- frame.src='https://www.youtube.com/embed/qf7mMtnkiIc?autoplay=1&mute=0&controls=1&loop=1&playlist=qf7mMtnkiIc&playsinline=1&enablejsapi=1&rel=0';
+ frame.src='https://www.youtube.com/embed/qf7mMtnkiIc?autoplay=1&mute=1&controls=1&loop=1&playlist=qf7mMtnkiIc&playsinline=1&enablejsapi=1&rel=0';
  let player,tries=0;
- function start(){try{player.setVolume(50);player.unMute();player.playVideo();}catch(e){}}
+ function start(){try{player.setVolume(50);player.playVideo();}catch(e){}}
  function init(){if(player)return;try{player=new YT.Player(frame,{events:{onReady:function(e){player=e.target;start();setTimeout(start,800);setTimeout(start,1800);},onStateChange:function(e){if(e.data===-1||e.data===5)start();}}});}catch(e){}}
  if(window.YT&&YT.Player)init();else{if(!document.querySelector('script[data-youtube-api]')){const t=document.createElement('script');t.src='https://www.youtube.com/iframe_api';t.dataset.youtubeApi='1';document.head.appendChild(t);}const poll=setInterval(()=>{tries++;if(window.YT&&YT.Player){clearInterval(poll);init();}else if(tries>40)clearInterval(poll);},250);}
 })();
 </script>
 
 <script>document.getElementById('quoteForm')?.addEventListener('submit',function(e){e.preventDefault();const f=new FormData(this);const msg='Olá! Gostaria de solicitar um orçamento com a Girardi Segurança Privada.\nNome: '+f.get('nome')+'\nEmpresa: '+(f.get('empresa')||'Não informada')+'\nTelefone: '+f.get('telefone')+'\nServiço: '+f.get('servico')+'\nDetalhes: '+(f.get('detalhes')||'Não informados');window.open('https://wa.me/5554996685643?text='+encodeURIComponent(msg),'_blank');});</script>
+
+<style id="girardi-mobile-motion">
+/* Movimento elegante e leve, priorizado para celular */
+@media (max-width:760px){
+  .mobile-reveal{opacity:0;transform:translateY(18px);transition:opacity .65s ease,transform .65s cubic-bezier(.2,.65,.25,1);will-change:opacity,transform}
+  .mobile-reveal.in-view{opacity:1;transform:translateY(0);will-change:auto}
+  .service,.about-card,.diff,.contact-box,.quote-form,.hero-inner,.seal,.youtube-player{position:relative;overflow:hidden}
+  .service:after,.about-card:after,.contact-box:after,.quote-form:after{content:'';position:absolute;inset:0;pointer-events:none;background:linear-gradient(115deg,transparent 0%,rgba(220,225,232,.045) 45%,transparent 58%);transform:translateX(-130%);animation:girardi-sheen 7s ease-in-out infinite}
+  .service:nth-child(2):after{animation-delay:1.2s}.service:nth-child(3):after{animation-delay:2.4s}
+  .btn,.wa-float{transition:transform .2s ease,box-shadow .2s ease}
+  .btn:active,.wa-float:active{transform:scale(.97)}
+  .hero:before,.hero:after{animation:girardi-drift 16s ease-in-out infinite alternate}
+  .hero:after{animation-delay:3s}
+  .hero-logo{animation:girardi-glow 5s ease-in-out infinite}
+}
+@keyframes girardi-sheen{0%,65%,100%{transform:translateX(-130%)}82%{transform:translateX(130%)}}
+@keyframes girardi-drift{from{translate:0 0}to{translate:12px -8px}}
+@keyframes girardi-glow{0%,100%{box-shadow:0 0 28px rgba(210,215,225,.10)}50%{box-shadow:0 0 42px rgba(210,215,225,.23)}}
+@media(prefers-reduced-motion:reduce){.mobile-reveal,.service:after,.about-card:after,.contact-box:after,.quote-form:after,.hero:before,.hero:after,.hero-logo{animation:none!important;transition:none!important}.mobile-reveal{opacity:1;transform:none}}
+</style>
+<script id="girardi-mobile-motion-script">
+(function(){
+ if(!window.matchMedia('(max-width:760px)').matches||window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+ const selectors='.hero-inner,.section-kicker,h2,.intro,.service,.diff,.about-card,.seal,.contact-box,.quote-form,.promo-frame';
+ document.querySelectorAll(selectors).forEach(el=>{if(el.closest('#girardi-splash'))return;el.classList.add('mobile-reveal')});
+ if(!('IntersectionObserver' in window)){document.querySelectorAll('.mobile-reveal').forEach(el=>el.classList.add('in-view'));return;}
+ const io=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('in-view');io.unobserve(entry.target)}}),{threshold:.12,rootMargin:'0px 0px -30px 0px'});
+ document.querySelectorAll('.mobile-reveal').forEach(el=>io.observe(el));
+})();
+</script>
+
 </body></html>
